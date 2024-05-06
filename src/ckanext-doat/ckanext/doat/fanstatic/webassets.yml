@@ -7,12 +7,15 @@
 #     preload:
 #       - base/main
 
-doat-css:
+doat_css:
   filter: cssrewrite
   output: ckanext-doat/%(version)s-doat.css
   contents:
     - css/doat.css
-
+doat_main_css:
+  filters: cssrewrite
+  output: ckanext-doat/%(version)s_doat_main.css
+  contents: css/doat_main.css
 doat_js:
   filter: rjsmin
   output: ckanext-doat/%(version)s_doat.js
