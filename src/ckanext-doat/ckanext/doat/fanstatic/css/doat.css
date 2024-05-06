@@ -56,6 +56,9 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+.account-masthead{
+  background: #0c2ac7;
+}
 .page-heading,
 .media-heading {
   font-family: "sukhumvitBold";

@@ -7,40 +7,15 @@
 #     preload:
 #       - base/main
 
-# doat-css:
-#   filter: cssrewrite
-#   output: ckanext-doat/%(version)s-doat.css
-#   contents:
-#     - css/doat.css
-
-doat_css:
-  filters: cssrewrite
-  output: ckanext-thai-gdc/%(version)s_doat.css
+doat-css:
+  filter: cssrewrite
+  output: ckanext-doat/%(version)s-doat.css
   contents:
     - css/doat.css
-doat_fuchsia_css:
-  filters: cssrewrite
-  output: ckanext-thai-gdc/%(version)s_doat_fuchsia.css
-  contents: css/doat_fuchsia.css
-doat_green_css:
-  filters: cssrewrite
-  output: ckanext-thai-gdc/%(version)s_doat_green.css
-  contents: css/doat_green.css
-doat_main_css:
-  filters: cssrewrite
-  output: ckanext-thai-gdc/%(version)s_doat_main.css
-  contents: css/doat_main.css
-doat_maroon_css:
-  filters: cssrewrite
-  output: ckanext-thai-gdc/%(version)s_doat_maroon.css
-  contents: css/doat_maroon.css
-doat_red_css:
-  filters: cssrewrite
-  output: ckanext-doat/%(version)s_doat_red.css
-  contents: css/doat_red.css
+
 doat_js:
   filter: rjsmin
-  output: ckanext-doat/%(version)s_thai-gdc.js
+  output: ckanext-doat/%(version)s_doat.js
   extra:
     preload:
       - base/main

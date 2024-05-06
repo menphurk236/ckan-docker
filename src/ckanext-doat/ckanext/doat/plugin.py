@@ -121,6 +121,19 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     # IConfigurer
 
     def update_config(self, config_):
+
+        if toolkit.check_ckan_version(max_version='2.9'):
+            toolkit.add_ckan_admin_tab(config_, 'banner_edit', 'แก้ไขแบนเนอร์')
+            toolkit.add_ckan_admin_tab(config_, 'dataset_import', 'นำเข้ารายการชุดข้อมูล')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', 'ส่งออกรายการชุดข้อมูล')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', 'ป็อปอัพ')
+        else:
+            toolkit.add_ckan_admin_tab(config_, 'banner_edit', u'แก้ไขแบนเนอร์', icon='wrench')
+            toolkit.add_ckan_admin_tab(config_, 'dataset_import', u'นำเข้ารายการชุดข้อมูล', icon='cloud-upload')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', u'ส่งออกรายการชุดข้อมูล', icon='cloud-download')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', u'ป็อปอัพ', icon='window-maximize')
+
+
         toolkit.add_template_directory(config_, "templates")
         toolkit.add_public_directory(config_, "public")
         toolkit.add_public_directory(config_, 'fanstatic')

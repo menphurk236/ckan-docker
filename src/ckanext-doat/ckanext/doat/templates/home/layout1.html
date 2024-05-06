@@ -10,21 +10,25 @@
     width: 33%;
   }
 </style>
-<div role="main" class="hero" style="background-image: url('{{ background }}')">
+<div role="main" class="main hero" style="background-image: url('{{ background }}')">
   <div class="container">
     <div class="row row1">
       <div class="col-md-6 col1">
-        {% block promoted %}
-        {% snippet 'home/snippets/promoted.html' %}
-        {% endblock %}
-      </div>
-      <div class="col-md-6 col2" style="position: unset;">
         {% block search %}
         {% snippet 'home/snippets/search.html' %}
         {% endblock %}
         <br />
         {% block stats %}
         {% snippet 'home/snippets/stats.html' %}
+        {% endblock %}
+      </div>
+      <div class="col-md-6 col2" style="position: unset;">
+        {% block banner %}
+        {% snippet 'home/snippets/banner.html' %}
+        {% endblock %}
+        <br />
+        {% block top_view_datasets %}
+        {% snippet 'home/snippets/top_view_datasets.html' %}
         {% endblock %}
       </div>
     </div>
