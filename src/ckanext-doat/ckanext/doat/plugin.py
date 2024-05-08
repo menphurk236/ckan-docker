@@ -1,7 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _
-
+import ckan.model as model
 from six import string_types
 
 import ckanext.doat.cli as cli
@@ -10,9 +10,12 @@ import ckanext.doat.views as views
 from ckanext.doat.logic import (
     action, auth, validators
 )
+from ckanext.doat import auth as doat_auth
 from ckan.lib.plugins import DefaultTranslation
 import logging
 import os
+
+import ckan.authz as authz
 
 log = logging.getLogger(__name__)
 
@@ -53,6 +56,10 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         except:
             return search_results
         return search_results
+    
+    def before_view(self, pkg_dict):
+        pkg_dict['tracking_summary'] = (model.TrackingSummary.get_for_package(pkg_dict['id']))
+        return pkg_dict
 
     def _isEnglish(self, s):
         try:
@@ -121,7 +128,6 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     # IConfigurer
 
     def update_config(self, config_):
-
         if toolkit.check_ckan_version(max_version='2.9'):
             toolkit.add_ckan_admin_tab(config_, 'banner_edit', 'แก้ไขแบนเนอร์')
             toolkit.add_ckan_admin_tab(config_, 'dataset_import', 'นำเข้ารายการชุดข้อมูล')
@@ -177,11 +183,117 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         config_['ckan.upload.admin.mimetypes'] = config_.get('ckan.upload.admin.mimetypes', 'image/png image/gif image/jpeg image/vnd.microsoft.icon application/zip image/x-icon')
         config_['ckan.upload.admin.types'] = config_.get('ckan.upload.admin.types', 'image application')
 
+    def update_config_schema(self, schema):
+        ignore_missing = toolkit.get_validator('ignore_missing')
+        unicode_safe = toolkit.get_validator('unicode_safe')
+        schema.update({
+            'ckan.site_org_address': [ignore_missing, unicode_safe],
+            'ckan.site_org_contact': [ignore_missing, unicode_safe],
+            'ckan.site_org_email': [ignore_missing, unicode_safe],
+            'ckan.site_policy_link': [ignore_missing, unicode_safe],
+            'ckan.promoted_banner': [ignore_missing, unicode_safe],
+            'promoted_banner_upload': [ignore_missing, unicode_safe],
+            'clear_promoted_banner_upload': [ignore_missing, unicode_safe],
+            'ckan.search_background': [ignore_missing, unicode_safe],
+            'search_background_upload': [ignore_missing, unicode_safe],
+            'clear_search_background_upload': [ignore_missing, unicode_safe],
+            'template_file': [ignore_missing, unicode_safe],
+            'template_file_upload': [ignore_missing, unicode_safe],
+            'clear_template_file_upload': [ignore_missing, unicode_safe],
+            'import_org': [ignore_missing, unicode_safe],
+            'import_log': [ignore_missing, unicode_safe],
+            'template_org': [ignore_missing, unicode_safe],
+            'ckan.favicon': [ignore_missing, unicode_safe],
+            'favicon_upload': [ignore_missing, unicode_safe],
+            'clear_favicon_upload': [ignore_missing, unicode_safe],
+            'ckan.import_uuid': [ignore_missing, unicode_safe],
+            'ckan.import_row': [ignore_missing, unicode_safe],
+            'ckan.import_params': [ignore_missing, unicode_safe],
+        })
+        return schema
+
+    # IRoutes
+    def before_map(self, map):
+        map.connect(
+            'banner_edit',
+            '/ckan-admin/banner-edit',
+            action='edit_banner',
+            ckan_icon='wrench',
+            controller='ckanext.doat.controllers.banner:BannerEditController',
+        )
+        map.connect(
+            'dataset_import',
+            '/ckan-admin/dataset-import',
+            action='import_dataset',
+            ckan_icon='cloud-upload',
+            controller='ckanext.doat.controllers.dataset:DatasetImportController',
+        )
+        map.connect(
+            'clear_import_log',
+            '/ckan-admin/clear-import-log',
+            action='clear_import_log',
+            controller='ckanext.doat.controllers.dataset:DatasetImportController',
+        )
+        map.connect(
+            'dataset_datatype_patch',
+            '/dataset/edit-datatype/{package_id}',
+            action='datatype_patch',
+            controller='ckanext.doat.controllers.dataset:DatasetManageController',
+        )
+        map.connect(
+            'user_active',
+            '/user/edit/user_active',
+            action='user_active',
+            controller='ckanext.doat.controllers.user:UserManageController',
+        )
+        # map.connect(
+        #     'organizations_index',
+        #     '/organization/',
+        #     action='index',
+        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        # )
+        # map.connect(
+        #     'organizations_index',
+        #     '/organization',
+        #     action='index',
+        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        # )
+        map.connect(
+            'gdc_agency_admin_export',
+            '/ckan-admin/dataset-export',
+            action='index',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.export_package:ExportPackageController'
+        )
+        map.connect(
+            'gdc_agency_admin_download',
+            '/ckan-admin/dataset-export/{id:.*|}',
+            action='download',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.export_package:ExportPackageController'
+        )
+        map.connect(
+            'gdc_agency_admin_popup',
+            '/ckan-admin/dataset-popup',
+            action='index',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.popup:PopupController'
+        )
+        return map
     
     # IAuthFunctions
 
     def get_auth_functions(self):
-        return auth.get_auth_functions()
+        auth_functions = {
+            'member_create': doat_auth.member_create,
+            'user_generate_apikey': doat_auth.user_generate_apikey,
+            'resource_show': doat_auth.restrict_resource_show,
+            'resource_view_show': doat_auth.restrict_resource_show,
+            'package_delete': doat_auth.package_delete,
+            'resource_delete': doat_auth.resource_delete,
+            'resource_view_reorder': doat_auth.resource_view_reorder,
+        }
+        return auth_functions
 
     # IActions
 

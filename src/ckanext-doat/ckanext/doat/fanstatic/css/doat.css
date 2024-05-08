@@ -60,13 +60,20 @@ body {
   background-size: cover;
 }
 .main{
+  width: 100%;
   background: url("../../../base/images/bg-banner.jpg") !important;
+    background-repeat: no-repeat !important;
+      background-size: cover !important;
 }
 .account-masthead{
   background: #0c2ac7 url("../../../base/images/bg.png") !important;
 }
 .masthead{
-  font-family: "sukhumvitText"
+  width: 100%;
+  background: url("../../../base/images/bg-banner.jpg") !important;
+  font-family: "sukhumvitText";
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 }
 .toolbar .breadcrumb a{
   color: #fff !important;
