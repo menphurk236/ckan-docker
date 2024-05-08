@@ -79,6 +79,9 @@ body {
   color: #fff !important;
   font-family: "sukhumvitText"
 }
+.account-masthead .account ul li a{
+  font-family: "sukhumvitText"
+}
 .page-heading,
 .media-heading {
   font-family: "sukhumvitBold";
@@ -226,4 +229,14 @@ b, strong{
 
 .homepage .module-search .search-form input{
   padding: 0.375rem 0.75rem !important;
+}
+
+label{
+  font-family: sukhumvitText;
+}
+p{
+  font-family: sukhumvitText;
+}
+.form-control{
+  font-family: sukhumvitText;
 }
