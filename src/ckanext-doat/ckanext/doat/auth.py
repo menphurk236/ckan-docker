@@ -6,7 +6,7 @@ from ckan.common import _, c
 import ckan.logic.auth as logic_auth
 from ckan import logic
 import ckan.authz as authz
-from ckanext.doat import helpers as thai_gdc_h
+from ckanext.doat import helpers as doat_h
 
 import logging
 
@@ -55,7 +55,7 @@ def member_create(context, data_dict):
         permission = 'manage_group'
 
     if c.controller in ['package', 'dataset'] and c.action in ['groups']:
-        authorized = thai_gdc_h.user_has_admin_access(include_editor_access=True)
+        authorized = doat_h.user_has_admin_access(include_editor_access=True)
         # Fallback to the default CKAN behaviour
         if not authorized:
             authorized = authz.has_user_permission_for_group_or_org(group.id,
@@ -85,11 +85,7 @@ def package_delete(context, data_dict):
     # Defer authorization for package_delete to package_update, as deletions
     # are essentially changing the state field
     try:
-        gd_pkg_state = thai_gdc_h.get_gdcatalog_state('published', data_dict.get('id')).get('result')
-        if gd_pkg_state[0].get('metadata_modified') != '' and toolkit.c.controller == 'dataset':
-            return {'success': False}
-        else:
-            return authz.is_authorized('package_update', context, data_dict)
+        return authz.is_authorized('package_update', context, data_dict)
     except:
         return {'success': False}
 

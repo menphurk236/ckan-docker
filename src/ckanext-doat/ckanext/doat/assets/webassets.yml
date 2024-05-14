@@ -1,0 +1,14 @@
+# doat-js:
+#   filter: rjsmin
+#   output: ckanext-doat/%(version)s-doat.js
+#   contents:
+#     - js/doat.js
+#   extra:
+#     preload:
+#       - base/main
+
+# doat-css:
+#   filter: cssrewrite
+#   output: ckanext-doat/%(version)s-doat.css
+#   contents:
+#     - css/doat.css

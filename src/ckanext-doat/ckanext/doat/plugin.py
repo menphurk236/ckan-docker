@@ -1,21 +1,16 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _
+from ckan.lib.plugins import DefaultTranslation
 import ckan.model as model
+
 from six import string_types
 
-import ckanext.doat.cli as cli
-import ckanext.doat.helpers as helpers
-import ckanext.doat.views as views
-from ckanext.doat.logic import (
-    action, auth, validators
-)
 from ckanext.doat import auth as doat_auth
-from ckan.lib.plugins import DefaultTranslation
+from ckanext.doat import helpers as doat_h
+
 import logging
 import os
-
-import ckan.authz as authz
 
 log = logging.getLogger(__name__)
 
@@ -25,11 +20,9 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     plugins.implements(plugins.ITranslation)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController, inherit=True)
-    plugins.implements(plugins.IValidators)
+    plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
-    plugins.implements(plugins.IActions)
-    
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
@@ -40,10 +33,6 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         return facets_dict
 
     # IPackageController
-    def after_show(self, context, data_dict):
-        resources = [resource_dict for resource_dict in data_dict['resources'] if not (resource_dict.get('resource_private','') == "True" and not auth.is_authorized('package_update', context, data_dict).get('success'))]
-        data_dict['resources'] = resources
-        data_dict['num_resources'] = len(data_dict['resources'])
 
     def after_search(self, search_results, search_params):
         try:
@@ -56,7 +45,7 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         except:
             return search_results
         return search_results
-    
+
     def before_view(self, pkg_dict):
         pkg_dict['tracking_summary'] = (model.TrackingSummary.get_for_package(pkg_dict['id']))
         return pkg_dict
@@ -125,25 +114,14 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         res_dict['created_at'] = res_dict.get('created')
         return res_dict
 
+
     # IConfigurer
 
     def update_config(self, config_):
-        if toolkit.check_ckan_version(max_version='2.9'):
-            toolkit.add_ckan_admin_tab(config_, 'banner_edit', 'แก้ไขแบนเนอร์')
-            toolkit.add_ckan_admin_tab(config_, 'dataset_import', 'นำเข้ารายการชุดข้อมูล')
-            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', 'ส่งออกรายการชุดข้อมูล')
-            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', 'ป็อปอัพ')
-        else:
-            toolkit.add_ckan_admin_tab(config_, 'banner_edit', u'แก้ไขแบนเนอร์', icon='wrench')
-            toolkit.add_ckan_admin_tab(config_, 'dataset_import', u'นำเข้ารายการชุดข้อมูล', icon='cloud-upload')
-            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', u'ส่งออกรายการชุดข้อมูล', icon='cloud-download')
-            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', u'ป็อปอัพ', icon='window-maximize')
-
-
-        toolkit.add_template_directory(config_, "templates")
-        toolkit.add_public_directory(config_, "public")
+        toolkit.add_template_directory(config_, 'templates')
+        toolkit.add_public_directory(config_, 'public')
         toolkit.add_public_directory(config_, 'fanstatic')
-        toolkit.add_resource("fanstatic", "ckanext-doat")
+        toolkit.add_resource('fanstatic', 'doat')
 
         try:
             from ckan.lib.webassets_tools import add_public_path
@@ -154,10 +132,10 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
                 os.path.dirname(__file__), 'fanstatic'
             )
             add_public_path(asset_path, '/')
-
+        
         config_['ckan.tracking_enabled'] = 'true'
-        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.doat:ckan_dataset.json')
-        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.doat:presets.json')
+        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.thai_gdc:ckan_dataset.json')
+        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.thai_gdc:presets.json')
         config_['ckan.activity_streams_enabled'] = 'true'
         config_['ckan.auth.user_delete_groups'] = 'false'
         config_['ckan.auth.user_delete_organizations'] = 'false'
@@ -171,17 +149,11 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         config_['ckan.datasets_per_page'] = '30'
         config_['ckan.jobs.timeout'] = '3600'
         config_['ckan.recline.dataproxy_url'] = config_.get('ckan.recline.dataproxy_url','https://dataproxy.gdcatalog.go.th')
-        config_['doat.opend_playground_url'] = config_.get('doat.opend_playground_url','https://opend-playground.gdcatalog.go.th')
-        config_['doat.gdcatalog_harvester_url'] = config_.get('doat.gdcatalog_harvester_url','https://harvester.gdcatalog.go.th')
-        config_['doat.gdcatalog_status_show'] = config_.get('doat.gdcatalog_status_show','true')
-        config_['doat.gdcatalog_portal_url'] = config_.get('doat.gdcatalog_portal_url','https://gdcatalog.go.th')
-        config_['doat.catalog_org_type'] = config_.get('doat.catalog_org_type','agency') #agency/area_based/data_center
-        config_['doat.is_as_a_service'] = config_.get('doat.is_as_a_service', 'false')
-        config_['doat.gdcatalog_apiregister_url'] = config_.get('doat.gdcatalog_apiregister_url', 'https://apiregister.gdcatalog.go.th')
         config_['ckan.datastore.sqlsearch.enabled'] = config_.get('ckan.datastore.sqlsearch.enabled', 'false')
         config_['ckan.datastore.search.rows_max'] = config_.get('ckan.datastore.search.rows_max', '10000')
         config_['ckan.upload.admin.mimetypes'] = config_.get('ckan.upload.admin.mimetypes', 'image/png image/gif image/jpeg image/vnd.microsoft.icon application/zip image/x-icon')
         config_['ckan.upload.admin.types'] = config_.get('ckan.upload.admin.types', 'image application')
+
 
     def update_config_schema(self, schema):
         ignore_missing = toolkit.get_validator('ignore_missing')
@@ -211,7 +183,7 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'ckan.import_params': [ignore_missing, unicode_safe],
         })
         return schema
-
+    
     # IRoutes
     def before_map(self, map):
         map.connect(
@@ -282,7 +254,6 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         return map
     
     # IAuthFunctions
-
     def get_auth_functions(self):
         auth_functions = {
             'member_create': doat_auth.member_create,
@@ -294,29 +265,44 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'resource_view_reorder': doat_auth.resource_view_reorder,
         }
         return auth_functions
-
-    # IActions
-
-    def get_actions(self):
-        return action.get_actions()
-
-    # IBlueprint
-
-    def get_blueprint(self):
-        return views.get_blueprints()
-
-    # IClick
-
-    # def get_commands(self):
-    #     return cli.get_commands()
-
-    # ITemplateHelpers
-
-    def get_helpers(self):
-        return helpers.get_helpers()
-
-    # IValidators
-
-    def get_validators(self):
-        return validators.get_validators()
     
+# ITemplateHelpers
+    def get_helpers(self):
+        return {
+            'doat_get_organizations': doat_h.get_organizations,
+            'doat_get_groups': doat_h.get_groups,
+            'doat_get_resource_download': doat_h.get_resource_download,
+            'doat_day_thai': doat_h.day_thai,
+            'doat_get_stat_all_view': doat_h.get_stat_all_view,
+            'doat_get_last_update_tracking': doat_h.get_last_update_tracking,
+            'doat_facet_chart': doat_h.facet_chart,
+            'doat_get_page': doat_h.get_page,
+            'doat_get_recent_view_for_package': doat_h.get_recent_view_for_package,
+            'doat_get_featured_pages': doat_h.get_featured_pages,
+            'doat_get_all_groups': doat_h.get_all_groups,
+            'doat_get_all_groups_all_type': doat_h.get_all_groups_all_type,
+            'doat_get_action': doat_h.get_action,
+            'doat_get_extension_version': doat_h.get_extension_version,
+            'doat_get_users_deleted': doat_h.get_users_deleted,
+            'doat_get_users_non_member': doat_h.get_users_non_member,
+            'doat_get_gdcatalog_state': doat_h.get_gdcatalog_state,
+            'doat_get_opend_playground_url': doat_h.get_opend_playground_url,
+            'doat_get_catalog_org_type': doat_h.get_catalog_org_type,
+            'doat_get_gdcatalog_status_show': doat_h.get_gdcatalog_status_show,
+            'doat_get_gdcatalog_portal_url': doat_h.get_gdcatalog_portal_url,
+            'doat_get_gdcatalog_apiregister_url': doat_h.get_gdcatalog_apiregister_url,
+            'doat_convert_string_todate': doat_h.convert_string_todate,
+            'doat_get_group_color': doat_h.get_group_color,
+            'doat_dataset_bulk_import_status': doat_h.dataset_bulk_import_status,
+            'doat_dataset_bulk_import_count': doat_h.dataset_bulk_import_count,
+            'doat_dataset_bulk_import_log': doat_h.dataset_bulk_import_log,
+            'doat_get_is_as_a_service': doat_h.get_is_as_a_service,
+            'doat_get_gdcatalog_version_update': doat_h.get_gdcatalog_version_update,
+            'doat_users_in_organization': doat_h.users_in_organization,
+            'doat_get_user_display_name': doat_h.get_user_display_name,
+            'gdc_agency_get_suggest_view': doat_h.get_suggest_view,
+            'gdc_agency_get_conf_group': doat_h.get_conf_group,
+            'nso_get_last_modified_datasets': doat_h.get_last_modified_datasets,
+            'nso_get_popular_datasets' : doat_h.get_popular_datasets,
+            'get_site_statistics': doat_h.get_site_statistics
+        }

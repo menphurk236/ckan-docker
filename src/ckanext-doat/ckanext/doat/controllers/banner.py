@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import ckan.plugins as p
 import ckan.lib.helpers as helpers
-from pylons import config
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dict_fns
 import ckan.model as model
@@ -102,9 +101,6 @@ class BannerEditController(BaseController):
                     # Save value in database
                     model.set_system_info(key, value)
 
-                    # Update CKAN's `config` object
-                    config[key] = value
-
                     # Only add it to the app_globals (`g`) object if explicitly defined
                     # there
                     globals_keys = app_globals.app_globals_from_config_details.keys()
@@ -125,9 +121,6 @@ class BannerEditController(BaseController):
             h.redirect_to(controller='ckanext.thai_gdc.controllers.banner:BannerEditController', action='edit_banner')
 
         schema = logic.schema.update_configuration_schema()
-        data = {}
-        for key in schema:
-            data[key] = config.get(key)
 
         vars = {'data': data, 'errors': {}, 'form_items': items}
         return render('admin/banner_form.html', extra_vars=vars)

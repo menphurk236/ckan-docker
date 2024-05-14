@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
+# Always prefer setuptools over distutils
 from setuptools import setup, find_packages
-from codecs import open
+from codecs import open  # To use a consistent encoding
 from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
-with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
+# Get the long description from the relevant file
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-
     name='''ckanext-doat''',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
@@ -18,14 +18,16 @@ setup(
     # http://packaging.python.org/en/latest/tutorial.html#version
     version='0.0.1',
 
-    description='''''',
+    description='''doa''',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 
     # The project's main homepage.
-    url='https://github.com/menphurk236/ckan-docker',
+    url='https://github.com/doa/ckanext-doat',
 
     # Author details
-    author='''''',
-    author_email='''''',
+    author='''doa''',
+    author_email='''doa@doa.go.th''',
 
     # Choose your license
     license='AGPL',
@@ -43,12 +45,12 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 2.7',
     ],
 
 
     # What does your project relate to?
-    keywords='''CKAN''',
+    keywords='''CKAN ckan,doa''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().

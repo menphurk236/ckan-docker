@@ -41,7 +41,8 @@
                                 {% block footer_attribution %}
                                 <div class="col-md-12 col-sm-12 col-xs-12 text-right">
                                     <span>
-                                        จำนวนผู้เข้าชม <span class="totalVisitor">111</span>
+                                        จำนวนผู้เข้าชม <span class="totalVisitor">{{ h.doat_get_stat_all_view()
+                                            }}</span>
                                     </span>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 text-right mt-1">

@@ -1,4 +1,4 @@
-[![Tests](https://github.com/menphurk236/ckanext-doat/workflows/Tests/badge.svg?branch=main)](https://github.com/menphurk236/ckanext-doat/actions)
+[![Tests](https://github.com/doa/ckanext-doat/workflows/Tests/badge.svg?branch=main)](https://github.com/doa/ckanext-doat/actions)
 
 # ckanext-doat
 
@@ -43,7 +43,7 @@ To install ckanext-doat:
 
 2. Clone the source and install it on the virtualenv
 
-    git clone https://github.com/menphurk236/ckanext-doat.git
+    git clone https://github.com/doa/ckanext-doat.git
     cd ckanext-doat
     pip install -e .
 	pip install -r requirements.txt
@@ -73,7 +73,7 @@ None at present
 To install ckanext-doat for development, activate your CKAN virtualenv and
 do:
 
-    git clone https://github.com/menphurk236/ckanext-doat.git
+    git clone https://github.com/doa/ckanext-doat.git
     cd ckanext-doat
     python setup.py develop
     pip install -r dev-requirements.txt
