@@ -20,7 +20,6 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     plugins.implements(plugins.ITranslation)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController, inherit=True)
-    plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
 
