@@ -10,11 +10,4 @@
 {% block scripts %}
 {{ super() }}
 {% asset 'doat/doat_js' %}
-<script>
-    $(document).ready(function () {
-        $('.carousel').carousel({
-            interval: 5000
-        });
-    });
-</script>
 {% endblock %}

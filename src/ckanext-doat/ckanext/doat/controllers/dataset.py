@@ -915,7 +915,7 @@ class DatasetImportController(p.toolkit.BaseController):
                         'error_summary': error_summary, 'form_items': items}
                 return render('admin/dataset_import_form.html', extra_vars=vars)
 
-            h.redirect_to(controller='ckanext.thai_gdc.controllers.dataset:DatasetImportController', action='import_dataset')
+            h.redirect_to(controller='ckanext.doat.controllers.dataset:DatasetImportController', action='import_dataset')
 
         schema = logic.schema.update_configuration_schema()
         data = {}

@@ -145,13 +145,13 @@ def get_gdcatalog_status_show():
     return 'true'
 
 def get_gdcatalog_portal_url():
-    return 'https://data.go.th'
+    return 'https://gdcatalog.go.th'
 
 def get_gdcatalog_apiregister_url():
-    return 'https://apiregister.data.go.th'
+    return 'https://apiregister.gdcatalog.go.th'
 
 def get_gdcatalog_version_update():
-    gdcatalog_harvester_url = 'https://gdcatalog.data.go.th'
+    gdcatalog_harvester_url = 'https://harvester.gdcatalog.go.th'
     request_proxy = 'true'
     if request_proxy:
         proxies = {
@@ -185,7 +185,7 @@ def get_gdcatalog_version_update():
 def get_gdcatalog_state(zone, package_id):
     state = []
     gdcatalog_status_show = get_gdcatalog_status_show()
-    gdcatalog_harvester_url = 'https://gdcatalog.data.go.th'
+    gdcatalog_harvester_url = 'https://harvester.gdcatalog.go.th'
     site_url = 'https://data.go.th'
     request_proxy = 'true'
     if request_proxy:

@@ -134,8 +134,8 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             add_public_path(asset_path, '/')
         
         config_['ckan.tracking_enabled'] = 'true'
-        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.thai_gdc:ckan_dataset.json')
-        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.thai_gdc:presets.json')
+        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.doat:ckan_dataset.json')
+        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.doat:presets.json')
         config_['ckan.activity_streams_enabled'] = 'true'
         config_['ckan.auth.user_delete_groups'] = 'false'
         config_['ckan.auth.user_delete_organizations'] = 'false'
@@ -222,13 +222,13 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         #     'organizations_index',
         #     '/organization/',
         #     action='index',
-        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        #     controller='ckanext.doat.controllers.organization:OrganizationCustomController'
         # )
         # map.connect(
         #     'organizations_index',
         #     '/organization',
         #     action='index',
-        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        #     controller='ckanext.doat.controllers.organization:OrganizationCustomController'
         # )
         map.connect(
             'gdc_agency_admin_export',
