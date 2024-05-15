@@ -305,5 +305,8 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'gdc_agency_get_conf_group': doat_h.get_conf_group,
             'nso_get_last_modified_datasets': doat_h.get_last_modified_datasets,
             'nso_get_popular_datasets' : doat_h.get_popular_datasets,
-            'get_site_statistics': doat_h.get_site_statistics
+            'get_site_statistics': doat_h.get_site_statistics,
+            'group_tree_parents': doat_h.group_tree_parents,
+            'group_tree': doat_h.group_tree,
+            'group_tree_highlight': doat_h.group_tree_highlight,
         }
