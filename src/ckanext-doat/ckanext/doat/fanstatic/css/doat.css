@@ -72,7 +72,12 @@ body {
   float: left;
   font-family: "sukhumvitText";
 }
-
+.masthead .debug{
+  display: none;
+}
+#flDebug #flShowToolBarButton{
+  display: none !important;
+}
 .account-masthead .add-font ul:before,
 .account-masthead .add-font ul:after {
   display: table;
