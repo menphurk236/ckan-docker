@@ -324,3 +324,9 @@ p{
 .form-control{
   font-family: sukhumvitText;
 }
+.nav-tabs .fa:last-child,
+.module-heading .fa:last-child,
+.btn .fa:last-child {
+  margin-right: 3px;
+  color: #bfd7de;
+}

@@ -6,7 +6,7 @@
     {{ h.literal(message) }}
 </div>
 {% if 'Data Dictionary saved.' in h.literal(message) %}
-{% set result = h.thai_gdc_get_action('package_patch', {'id':resource.package_id}) %}
+{% set result = h.doat_get_action('package_patch', {'id':resource.package_id}) %}
 {% endif %}
 {% endfor %}
 {% endblock %}

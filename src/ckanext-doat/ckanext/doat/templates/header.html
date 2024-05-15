@@ -64,7 +64,7 @@
         </li>
         {% endblock %} {% block header_account_log_out_link %}
         <li>
-          <form action="{{ h.url_for('user.logout') }}" method="post">
+          <form action="{{ h.url_for('user.logout') }}" method="get">
             {{ h.csrf_input() }}
             <button class="btn btn-link" type="submit" title="{{ _('Log out') }}">
               <i class="fa fa-sign-out" aria-hidden="true"></i>
