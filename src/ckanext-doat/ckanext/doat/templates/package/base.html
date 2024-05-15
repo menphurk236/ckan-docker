@@ -6,10 +6,6 @@
 {% if pkg.organization %}
 {% set organization = pkg.organization.title %}
 <li>{% link_for _('Organizations'), controller='organization', action='index' %}</li>
-{% set parent_list = h.group_tree_parents(pkg.organization.name) %}
-{% for parent_node in parent_list %}
-<li>{% link_for parent_node.title|truncate(35), controller='organization', action='read', id=parent_node.name %}</li>
-{% endfor %}
 <li>{% link_for organization|truncate(30), controller='organization', action='read', id=pkg.organization.name %}</li>
 {% else %}
 <li>{% link_for _('Datasets'), controller='dataset' if h.ckan_version().split('.')[1] | int >= 9 else 'package',
