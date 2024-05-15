@@ -18,7 +18,7 @@ services:
       ckan:
         condition: service_healthy
     ports:
-      - "0.0.0.0:${NGINX_SSLPORT_HOST}:${NGINX_SSLPORT}"
+      - "0.0.0.0:${NGINX_PORT_HOST}:${NGINX_PORT_HOST}"
     
   ckan:
     build:
@@ -42,8 +42,9 @@ services:
         condition: service_healthy
     volumes:
       - ckan_storage:/var/lib/ckan
+      - pip_cache:/root/.cache/pip
+      - site_packages:/usr/lib/python3.10/site-packages
     restart: unless-stopped
-    image: thepaeth/ckan-thai_gdc:ckan-2.9-xloader
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
     

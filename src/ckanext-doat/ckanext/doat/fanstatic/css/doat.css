@@ -68,6 +68,85 @@ body {
 .account-masthead{
   background: #0c2ac7 url("../../../base/images/bg.png") !important;
 }
+.account-masthead .add-font {
+  float: left;
+  font-family: "sukhumvitText";
+}
+
+.account-masthead .add-font ul:before,
+.account-masthead .add-font ul:after {
+  display: table;
+  content: " ";
+}
+
+.account-masthead .add-font ul:after {
+  clear: both;
+}
+
+.account-masthead .add-font ul:before,
+.account-masthead .add-font ul:after {
+  display: table;
+  content: " ";
+}
+
+.account-masthead .add-font ul:after {
+  clear: both;
+}
+
+.account-masthead .add-font ul li {
+  display: block;
+  float: left;
+  border-left: 1px solid #00232e;
+}
+
+.account-masthead .add-font ul li a {
+  display: block;
+  color: #bfd7de;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0 10px;
+  line-height: 31px;
+}
+
+.account-masthead .add-font ul li a span.username,
+.account-masthead .add-font ul li a span.text {
+  margin: 0 2px 0 4px;
+}
+
+.account-masthead .add-font ul li a:hover {
+  color: #d9e7eb;
+  background-color: #00232e;
+  text-decoration: none;
+}
+
+.account-masthead .add-font ul li a.sub {
+  font-weight: 300;
+}
+
+.account-masthead .add-font ul li a .btn {
+  vertical-align: 1px;
+  margin-left: 3px;
+}
+
+.account-masthead .add-font .notifications a span.badge {
+  font-size: 12px;
+  margin-left: 3px;
+  padding: 1px 6px;
+  background-color: #00232e;
+  border-radius: 4px;
+  text-shadow: none;
+  color: #bfd7de;
+}
+
+.account-masthead .add-font .notifications a:hover span {
+  color: #fff;
+  background-color: #000f14;
+}
+
+.account-masthead .add-font .notifications.notifications-important a span.badge {
+  color: #fff;
+  background-color: #C9403A;
+}
 .masthead{
   width: 100%;
   background: url("../../../base/images/bg-banner.jpg") !important;

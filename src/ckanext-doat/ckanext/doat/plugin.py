@@ -20,6 +20,7 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     plugins.implements(plugins.ITranslation)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
 
@@ -182,6 +183,76 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'ckan.import_params': [ignore_missing, unicode_safe],
         })
         return schema
+    
+    # IRoutes
+    def before_map(self, map):
+        map.connect(
+            'banner_edit',
+            '/ckan-admin/banner-edit',
+            action='edit_banner',
+            ckan_icon='wrench',
+            controller='ckanext.doat.controllers.banner:BannerEditController',
+        )
+        map.connect(
+            'dataset_import',
+            '/ckan-admin/dataset-import',
+            action='import_dataset',
+            ckan_icon='cloud-upload',
+            controller='ckanext.doat.controllers.dataset:DatasetImportController',
+        )
+        map.connect(
+            'clear_import_log',
+            '/ckan-admin/clear-import-log',
+            action='clear_import_log',
+            controller='ckanext.doat.controllers.dataset:DatasetImportController',
+        )
+        map.connect(
+            'dataset_datatype_patch',
+            '/dataset/edit-datatype/{package_id}',
+            action='datatype_patch',
+            controller='ckanext.doat.controllers.dataset:DatasetManageController',
+        )
+        map.connect(
+            'user_active',
+            '/user/edit/user_active',
+            action='user_active',
+            controller='ckanext.doat.controllers.user:UserManageController',
+        )
+        # map.connect(
+        #     'organizations_index',
+        #     '/organization/',
+        #     action='index',
+        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        # )
+        # map.connect(
+        #     'organizations_index',
+        #     '/organization',
+        #     action='index',
+        #     controller='ckanext.thai_gdc.controllers.organization:OrganizationCustomController'
+        # )
+        map.connect(
+            'gdc_agency_admin_export',
+            '/ckan-admin/dataset-export',
+            action='index',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.export_package:ExportPackageController'
+        )
+        map.connect(
+            'gdc_agency_admin_download',
+            '/ckan-admin/dataset-export/{id:.*|}',
+            action='download',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.export_package:ExportPackageController'
+        )
+        map.connect(
+            'gdc_agency_admin_popup',
+            '/ckan-admin/dataset-popup',
+            action='index',
+            ckan_icon='file',
+            controller='ckanext.doat.controllers.popup:PopupController'
+        )
+        return map
+    
     
     # IAuthFunctions
     def get_auth_functions(self):
