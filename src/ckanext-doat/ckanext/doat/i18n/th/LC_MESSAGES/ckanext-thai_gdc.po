@@ -182,10 +182,10 @@ msgstr "ลบแล้ว"
 msgid "statistics"
 msgstr "สถิติสรุปชุดข้อมูล"
 
-msgid "Dataset Type"
+msgid "DatasetType"
 msgstr "ประเภทชุดข้อมูล"
 
-msgid "Data Category"
+msgid "DataCategory"
 msgstr "หมวดหมู่ตามธรรมาภิบาลข้อมูล"
 
 msgid "WAIT_VALIDATE"
@@ -266,5 +266,5 @@ msgstr "แสดงในหน้าหลัก"
 msgid "Show"
 msgstr "แสดง"
 
-msgid "Data Class Level"
+msgid "DataClassLevel"
 msgstr "ชั้นความลับของข้อมูลภาครัฐ"

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _
@@ -8,6 +11,7 @@ from six import string_types
 
 from ckanext.doat import auth as doat_auth
 from ckanext.doat import helpers as doat_h
+from ckanext.doat import validation as doat_validator
 
 import logging
 import os
@@ -20,15 +24,16 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     plugins.implements(plugins.ITranslation)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IValidators)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
-        facets_dict['data_type'] = toolkit._('Dataset Type') #ประเภทชุดข้อมูล
-        facets_dict['data_category'] = toolkit._('Data Category') #หมวดหมู่ตามธรรมาภิบาลข้อมูล
-        facets_dict['data_class_level'] = toolkit._('Data Class Level') #ชั้นความลับของข้อมูลภาครัฐ
+        facets_dict['data_type'] = toolkit._('DatasetType') #ประเภทชุดข้อมูล
+        facets_dict['data_category'] = toolkit._('DataCategory') #หมวดหมู่ตามธรรมาภิบาลข้อมูล
+        facets_dict['data_class_level'] = toolkit._('DataClassLevel') #ชั้นความลับของข้อมูลภาครัฐ
         facets_dict['private'] = toolkit._('Visibility') #การเข้าถึง
         return facets_dict
 
@@ -116,8 +121,16 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
 
 
     # IConfigurer
-
     def update_config(self, config_):
+        if toolkit.check_ckan_version(max_version='2.9'):
+            toolkit.add_ckan_admin_tab(config_, 'banner_edit', 'แก้ไขแบนเนอร์')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', 'ป็อปอัพ')
+        else:
+            toolkit.add_ckan_admin_tab(config_, 'banner_edit', u'แก้ไขแบนเนอร์', icon='wrench')
+            toolkit.add_ckan_admin_tab(config_, 'dataset_import', u'นำเข้ารายการชุดข้อมูล', icon='cloud-upload')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', u'ส่งออกรายการชุดข้อมูล', icon='cloud-download')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', u'ป็อปอัพ', icon='window-maximize')
+
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_public_directory(config_, 'fanstatic')
@@ -266,8 +279,17 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'resource_view_reorder': doat_auth.resource_view_reorder,
         }
         return auth_functions
-    
-# ITemplateHelpers
+
+    # IValidators
+    def get_validators(self):
+        return {
+            'tag_name_validator': doat_validator.tag_name_validator,
+            'tag_string_convert': doat_validator.tag_string_convert,
+            'package_name_validator': doat_validator.package_name_validator,
+            'package_title_validator': doat_validator.package_title_validator,
+        }
+
+    # ITemplateHelpers
     def get_helpers(self):
         return {
             'doat_get_organizations': doat_h.get_organizations,

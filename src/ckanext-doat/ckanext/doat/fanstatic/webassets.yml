@@ -25,5 +25,3 @@ doat_js:
   contents:
     - js/cookie_consent.js
     - js/add_font.js
-    - js/gdc_agency_hint_view.js
-    - js/gdc_agency_hint_form.js

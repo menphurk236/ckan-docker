@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 import ckan.model as model

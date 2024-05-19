@@ -537,7 +537,7 @@
       {
         "field_name": "data_class_level",
         "label": {
-          "en": "Data Class Level",
+          "en": "DataClassLevel",
           "th": "ชั้นความลับของข้อมูลภาครัฐ"
         },
         "choices": [

@@ -18,16 +18,16 @@ setup(
     # http://packaging.python.org/en/latest/tutorial.html#version
     version='0.0.1',
 
-    description='''doa''',
+    description='''''',
     long_description=long_description,
     long_description_content_type="text/markdown",
 
     # The project's main homepage.
-    url='https://github.com/doa/ckanext-doat',
+    url='https://github.com//ckanext-doat',
 
     # Author details
-    author='''doa''',
-    author_email='''doa@doa.go.th''',
+    author='''''',
+    author_email='''''',
 
     # Choose your license
     license='AGPL',
@@ -50,7 +50,7 @@ setup(
 
 
     # What does your project relate to?
-    keywords='''CKAN ckan,doa''',
+    keywords='''CKAN''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
