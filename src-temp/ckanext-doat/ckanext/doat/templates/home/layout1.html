@@ -1,0 +1,52 @@
+{% if g.search_background %}
+{% set background = g.search_background %}
+{% else %}
+{% set background = '/base/images/bg-banner.jpg' %}
+{% endif %}
+
+<style>
+  .homepage .stats ul li {
+    float: center;
+    width: 33%;
+  }
+</style>
+<div role="main" class="main hero" style="background-image: url('{{ background }}')">
+  <div class="container">
+    <div class="row row1">
+      <div class="col-md-6 col1">
+        <div class="module module-search module-narrow module-shallow box">
+          {% block search %}
+          {% snippet 'home/snippets/search.html' %}
+          {% endblock %}
+          <br />
+          {% block stats %}
+          {% snippet 'home/snippets/stats.html' %}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="col-md-6 col2" style="position: unset;">
+        {% block banner %}
+        {% snippet 'home/snippets/banner.html' %}
+        {% endblock %}
+        <br />
+        {% block top_view_datasets %}
+        {% snippet 'home/snippets/top_view_datasets.html' %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+<div role="main">
+  <div class="container">
+    <div class="row row2">
+      {% block featured_group %}
+      {% if category_dict and category_dict.keys()|length %}
+      {% snippet 'home/snippets/multi_groups.html', category_dict=category_dict %}
+      {% else %}
+      {% set stats = h.get_site_statistics() %}
+      {% snippet 'home/snippets/groups.html', stats=stats %}
+      {% endif %}
+      {% endblock %}
+    </div>
+  </div>
+</div>

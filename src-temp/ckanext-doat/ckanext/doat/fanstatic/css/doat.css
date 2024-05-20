@@ -1,0 +1,332 @@
+/* Open Sans from Google Fonts */
+@import 'https://fonts.googleapis.com/css?family=Quicksand:400,500,700';
+@import 'https://fonts.googleapis.com/css?family=Prompt:400,500,700';
+/* Theme LESS assets */
+/* Colors */
+/* Fonts */
+@font-face {
+  font-family: 'sukhumvitBold';
+  src: url('../fonts/sukhumvitset/sukhumvitset-bold-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-bold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sukhumvitLight';
+  src: url('../fonts/sukhumvitset/sukhumvitset-light-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sukhumvitMedium';
+  src: url('../fonts/sukhumvitset/sukhumvitset-medium-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sukhumvitSemiBold';
+  src: url('../fonts/sukhumvitset/sukhumvitset-semibold-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-semibold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sukhumvitText';
+  src: url('../fonts/sukhumvitset/sukhumvitset-text-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-text-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'sukhumvitThin';
+  src: url('../fonts/sukhumvitset/sukhumvitset-thin-webfont.woff2') format('woff2'),
+  url('../fonts/sukhumvitset/sukhumvitset-thin-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+html{
+  font-family: "sukhumvitText";
+}
+body {
+  background: #ffffff;
+  margin: 0;
+  font-family: "sukhumvitText";
+}
+.hero {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.main{
+  width: 100%;
+  background: url("../../../base/images/bg-banner.jpg") !important;
+    background-repeat: no-repeat !important;
+      background-size: cover !important;
+}
+.account-masthead{
+  background: #0c2ac7 url("../../../base/images/bg.png") !important;
+}
+.account-masthead .add-font {
+  float: left;
+  font-family: "sukhumvitText";
+}
+.masthead .debug{
+  display: none;
+}
+#flDebug #flShowToolBarButton{
+  display: none !important;
+}
+.account-masthead .add-font ul:before,
+.account-masthead .add-font ul:after {
+  display: table;
+  content: " ";
+}
+
+.account-masthead .add-font ul:after {
+  clear: both;
+}
+
+.account-masthead .add-font ul:before,
+.account-masthead .add-font ul:after {
+  display: table;
+  content: " ";
+}
+
+.account-masthead .add-font ul:after {
+  clear: both;
+}
+
+.account-masthead .add-font ul li {
+  display: block;
+  float: left;
+  border-left: 1px solid #00232e;
+}
+
+.account-masthead .add-font ul li a {
+  display: block;
+  color: #bfd7de;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0 10px;
+  line-height: 31px;
+}
+
+.account-masthead .add-font ul li a span.username,
+.account-masthead .add-font ul li a span.text {
+  margin: 0 2px 0 4px;
+}
+
+.account-masthead .add-font ul li a:hover {
+  color: #d9e7eb;
+  background-color: #00232e;
+  text-decoration: none;
+}
+
+.account-masthead .add-font ul li a.sub {
+  font-weight: 300;
+}
+
+.account-masthead .add-font ul li a .btn {
+  vertical-align: 1px;
+  margin-left: 3px;
+}
+
+.account-masthead .add-font .notifications a span.badge {
+  font-size: 12px;
+  margin-left: 3px;
+  padding: 1px 6px;
+  background-color: #00232e;
+  border-radius: 4px;
+  text-shadow: none;
+  color: #bfd7de;
+}
+
+.account-masthead .add-font .notifications a:hover span {
+  color: #fff;
+  background-color: #000f14;
+}
+
+.account-masthead .add-font .notifications.notifications-important a span.badge {
+  color: #fff;
+  background-color: #C9403A;
+}
+.masthead{
+  width: 100%;
+  background: url("../../../base/images/bg-banner.jpg") !important;
+  font-family: "sukhumvitText";
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+.toolbar .breadcrumb a{
+  color: #fff !important;
+  font-family: "sukhumvitText"
+}
+.account-masthead .account ul li a{
+  font-family: "sukhumvitText"
+}
+.page-heading,
+.media-heading {
+  font-family: "sukhumvitBold";
+}
+.btn {
+  font-family: "sukhumvitText";
+}
+.module-heading {
+  font-family: "sukhumvitBold";
+}
+.module-content h1 {
+  font-family: "sukhumvitText";
+}
+.news-header {
+  font-family: "sukhumvitText";
+}
+.news-item-title {
+  font-family: "sukhumvitText";
+}
+.add-dataset-modal {
+  position: fixed;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  display: none;
+}
+.add-dataset-modal-box {
+  display: table-cell;
+  background-color: #ffffff;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  background-clip: padding-box;
+  outline: none;
+  text-align: center;
+}
+.add-dataset-modal-description {
+  margin-top: 30px;
+}
+.add-dataset-modal-description p {
+  font-weight: bold;
+}
+.add-dataset-modal-description ul {
+  text-align: left;
+}
+.add-dataset-modal .close {
+  font-size: 35px;
+  color: white;
+  position: relative;
+  top: -32px;
+}
+.add-dataset-modal-backdrop {
+  display: none;
+}
+#dataset-resources {
+  border: 1px solid #dddddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+#dataset-resources h3,
+#dataset-resources .search-form {
+  display: inline;
+}
+.resource-list {
+  margin-top: 15px;
+}
+.js .image-upload input[type=file] {
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+}
+.nav-tabs .fa:last-child,
+.module-heading .fa:last-child,
+.btn .fa:last-child {
+  margin-right: 3px;
+}
+.resource-tracking-summary {
+  margin-top: -20px !important;
+  border-top: none !important;
+}
+.header {
+  font-family: sukhumvitBold;
+}
+h1, h2, h3 {
+  font-family: sukhumvitBold;
+}
+.masthead .section {
+  font-family: sukhumvitBold;
+}
+.divIconFooter {
+  float: left;
+  margin-right: 5px;
+}
+.iconFooter {
+  margin-right: 15px;
+  width: 15px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.ml35px {
+  margin-left: 35px !important;
+}
+.totalVisitor {
+  color: #ffffff;
+  font-family: "sukhumvitBold";
+  font-size: 20px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.toolbar .breadcrumb a {
+  text-shadow: none;
+  color: #505050;
+}
+.textRecentViews {
+  color: #EF7100;
+  margin-left: 5px;
+  font-family: sukhumvitText;
+  font-size: 12px;
+}
+.package_count {
+  font-family: sukhumvitText;
+}
+.site-footer {
+  color: #ffffff;
+  background: #0c2ac7 url("../../../base/images/bg.png") !important;
+  font-family: "sukhumvitText";
+}
+.site-footer label {
+  color: #ffffff;
+}
+b, strong{
+  font-family: sukhumvitBold;
+  color: #505050 !important;
+}
+.homepage .module-search .search-form{
+  padding: 10px !important;
+}
+
+.homepage .module-search .search-form input{
+  padding: 0.375rem 0.75rem !important;
+}
+
+label{
+  font-family: sukhumvitText;
+}
+p{
+  font-family: sukhumvitText;
+}
+.form-control{
+  font-family: sukhumvitText;
+}
+.nav-tabs .fa:last-child,
+.module-heading .fa:last-child,
+.btn .fa:last-child {
+  margin-right: 3px;
+  color: #bfd7de;
+}

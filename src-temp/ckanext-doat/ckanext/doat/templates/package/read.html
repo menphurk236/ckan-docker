@@ -1,0 +1,46 @@
+{% ckan_extends %}
+
+{% block package_description %}
+<style>
+  .label {
+    color: white;
+    padding: 8px;
+  }
+
+  .gdcatalog-warning {
+    background-color: #e56100;
+    margin-left: 10px;
+    margin-right: 0px;
+  }
+
+  .gdcatalog-success {
+    background-color: #2a612a;
+    margin-right: 0px;
+  }
+</style>
+<h1>
+  {% block page_heading %}
+  {{ h.dataset_display_name(pkg) }}
+  {% if pkg.state.startswith('draft') %}
+  [{{ _('Draft') }}]
+  {% endif %}
+  {% if pkg.state == 'deleted' %}
+  [{{ _('Deleted') }}]
+  {% endif %}
+  {% endblock %}
+</h1>
+{% block package_notes %}
+{% if pkg.notes %}
+<div class="notes embedded-content">
+  {{ h.render_markdown(h.get_translated(pkg, 'notes')) }}
+</div>
+{% endif %}
+{% endblock %}
+{# FIXME why is this here? seems wrong #}
+<span class="insert-comment-thread"></span>
+{% endblock %}
+
+{% block primary_content_inner %}
+{{super()}}
+
+{% endblock %}

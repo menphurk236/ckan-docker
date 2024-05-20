@@ -1,0 +1,10 @@
+{% asset 'doat/doat_css' %}
+{% if h.ckan_version().split('.')[1] | int <= 9 and h.ckan_version().split('.')[2] | int < 6 %} {% if 'fuchsia.css' in
+    g.main_css %} {% asset 'doat/doat_fuchsia_css' %} {% endif %} {% if 'green.css' in g.main_css %} {%
+    asset 'doat/doat_green_css' %} {% endif %} {% if 'main.css' in g.main_css %} {% asset 'doat/doat_main_css' %} {%
+    endif %} {% if 'maroon.css' in g.main_css %} {% asset 'doat/doat_maroon_css' %} {% endif %} {% if 'red.css' in
+    g.main_css %} {% asset 'doat/doat_red_css' %} {% endif %} {% else %} {% if 'css/fuchsia' in g.theme %} {%
+    asset 'doat/doat_fuchsia_css' %} {% endif %} {% if 'css/green' in g.theme %} {% asset 'doat/doat_green_css' %} {%
+    endif %} {% if 'css/main' in g.theme %} {% asset 'doat/doat_main_css' %} {% endif %} {% if 'css/maroon' in g.theme
+    %} {% asset 'doat/doat_maroon_css' %} {% endif %} {% if 'css/red' in g.theme %} {% asset 'doat/doat_red_css' %} {%
+    endif %} {% endif %}
