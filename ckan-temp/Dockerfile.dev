@@ -1,5 +1,4 @@
-FROM openknowledge/ckan-dev:2.9.9-py2
-#FROM thepaeth/ckan-base:2.9.5
+FROM thepaeth/ckan-base:2.9.9-py2
 
 # Install any extensions needed by your CKAN instance
 # - Make sure to add the plugins to CKAN__PLUGINS in the .env file
@@ -32,7 +31,7 @@ RUN  pip install -e git+https://github.com/ckan/ckanext-scheming.git@release-3.0
 RUN  pip install -e git+https://github.com/ckan/ckanext-dcat.git@v1.4.0#egg=ckanext-dcat && \
     pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.4.0/requirements-py2.txt
 
-# RUN pip install ckanext-visualize
+RUN pip install -e git+https://gitlab.nectec.or.th/opend/ckanext-opendstats.git#egg=ckanext-opendstats
 
 # Clone the extension(s) your are writing for your own project in the `src` folder
 # to get them mounted in this image at runtime
