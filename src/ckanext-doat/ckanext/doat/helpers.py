@@ -136,7 +136,7 @@ def convert_string_todate(str_date, format):
     return dt.strptime(str_date, format)
 
 def get_opend_playground_url():
-    return 'https://opend.data.go.th/playground'
+    return 'https://opend-playground.gdcatalog.go.th'
 
 def get_catalog_org_type():
     return 'organization'

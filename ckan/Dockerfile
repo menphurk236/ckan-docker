@@ -20,10 +20,10 @@ RUN pip install supervisor && \
     mkdir /etc/supervisord.d
 
 # Copy all setup files
-COPY ./setup ${APP_DIR}
-COPY ./setup/supervisor.worker.conf /etc/supervisord.d/worker.conf
-COPY ./setup/supervisor.cron.conf /etc/supervisord.d/cron.conf
-COPY ./setup/supervisord.conf /etc/supervisord.conf
+COPY .setup ${APP_DIR}
+COPY .\setup\supervisor.worker.conf /etc/supervisord.d/worker.conf
+COPY .\setup\supervisor.cron.conf /etc/supervisord.d/cron.conf
+COPY .\setup\supervisord.conf /etc/supervisord.conf
 # COPY ./setup ${APP_DIR}
 # COPY ./setup/supervisor.worker.conf /etc/supervisord.d/worker.conf
 # COPY ./setup/supervisord.conf /etc/supervisord.con
@@ -58,5 +58,5 @@ EXPOSE 5000
 
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD curl --fail http://localhost:5000/api/3/action/status_show || exit 1
 
-# ENTRYPOINT ["/srv/app/start_ckan.sh"]
-CMD [ "ls", "-la" ]
+ENTRYPOINT ["/srv/app/start_ckan.sh"]
+# CMD [ "ls", "-la" ]
