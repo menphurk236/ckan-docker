@@ -9,6 +9,7 @@ import ckan.model as model
 
 from six import string_types
 
+from actions import exporter_action, popup_action, opend_action
 from ckanext.doat import auth as doat_auth
 from ckanext.doat import helpers as doat_h
 from ckanext.doat import validation as doat_validator
@@ -28,6 +29,7 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
+    plugins.implements(plugins.IActions)
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
@@ -124,6 +126,8 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
     def update_config(self, config_):
         if toolkit.check_ckan_version(max_version='2.9'):
             toolkit.add_ckan_admin_tab(config_, 'banner_edit', 'แก้ไขแบนเนอร์')
+            toolkit.add_ckan_admin_tab(config_, 'dataset_import', 'นำเข้ารายการชุดข้อมูล')
+            toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_export', 'ส่งออกรายการชุดข้อมูล')
             toolkit.add_ckan_admin_tab(config_, 'gdc_agency_admin_popup', 'ป็อปอัพ')
         else:
             toolkit.add_ckan_admin_tab(config_, 'banner_edit', u'แก้ไขแบนเนอร์', icon='wrench')
@@ -147,8 +151,8 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             add_public_path(asset_path, '/')
         
         config_['ckan.tracking_enabled'] = 'true'
-        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.doat:ckan_dataset.json')
-        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.doat:presets.json')
+        config_['scheming.dataset_schemas'] = config_.get('scheming.dataset_schemas','ckanext.thai_gdc:ckan_dataset.json')
+        config_['scheming.presets'] = config_.get('scheming.presets','ckanext.thai_gdc:presets.json')
         config_['ckan.activity_streams_enabled'] = 'true'
         config_['ckan.auth.user_delete_groups'] = 'false'
         config_['ckan.auth.user_delete_organizations'] = 'false'
@@ -162,6 +166,13 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         config_['ckan.datasets_per_page'] = '30'
         config_['ckan.jobs.timeout'] = '3600'
         config_['ckan.recline.dataproxy_url'] = config_.get('ckan.recline.dataproxy_url','https://dataproxy.gdcatalog.go.th')
+        config_['thai_gdc.opend_playground_url'] = config_.get('thai_gdc.opend_playground_url','https://opend-playground.gdcatalog.go.th')
+        config_['thai_gdc.gdcatalog_harvester_url'] = config_.get('thai_gdc.gdcatalog_harvester_url','https://harvester.gdcatalog.go.th')
+        config_['thai_gdc.gdcatalog_status_show'] = config_.get('thai_gdc.gdcatalog_status_show','true')
+        config_['thai_gdc.gdcatalog_portal_url'] = config_.get('thai_gdc.gdcatalog_portal_url','https://gdcatalog.go.th')
+        config_['thai_gdc.catalog_org_type'] = config_.get('thai_gdc.catalog_org_type','agency') #agency/area_based/data_center
+        config_['thai_gdc.is_as_a_service'] = config_.get('thai_gdc.is_as_a_service', 'false')
+        config_['thai_gdc.gdcatalog_apiregister_url'] = config_.get('thai_gdc.gdcatalog_apiregister_url', 'https://apiregister.gdcatalog.go.th')
         config_['ckan.datastore.sqlsearch.enabled'] = config_.get('ckan.datastore.sqlsearch.enabled', 'false')
         config_['ckan.datastore.search.rows_max'] = config_.get('ckan.datastore.search.rows_max', '10000')
         config_['ckan.upload.admin.mimetypes'] = config_.get('ckan.upload.admin.mimetypes', 'image/png image/gif image/jpeg image/vnd.microsoft.icon application/zip image/x-icon')
@@ -280,6 +291,24 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
         }
         return auth_functions
 
+# IActionFunctions
+    def get_actions(self):
+        action_functions = {
+            'bulk_update_public': opend_action.bulk_update_public,
+            'dataset_bulk_import': opend_action.dataset_bulk_import,
+            'tag_list': opend_action.tag_list,
+            'group_type_patch': opend_action.group_type_patch,
+            'status_show': opend_action.status_show,
+            'gdc_agency_export_package': exporter_action.package,
+            'gdc_agency_get_conf_group': popup_action.get_conf_group,
+            'gdc_agency_update_conf_group': popup_action.update_conf_group,
+            'resource_view_create': opend_action.resource_view_create,
+            'resource_view_update': opend_action.resource_view_update,
+            'resource_view_delete': opend_action.resource_view_delete,
+            'resource_view_reorder' : opend_action.resource_view_reorder,
+        }
+        return action_functions
+
     # IValidators
     def get_validators(self):
         return {
@@ -327,8 +356,5 @@ class DoatPlugin(plugins.SingletonPlugin, DefaultTranslation, toolkit.DefaultDat
             'gdc_agency_get_conf_group': doat_h.get_conf_group,
             'nso_get_last_modified_datasets': doat_h.get_last_modified_datasets,
             'nso_get_popular_datasets' : doat_h.get_popular_datasets,
-            'get_site_statistics': doat_h.get_site_statistics,
-            'group_tree_parents': doat_h.group_tree_parents,
-            'group_tree': doat_h.group_tree,
-            'group_tree_highlight': doat_h.group_tree_highlight,
+            'get_site_statistics': doat_h.get_site_statistics
         }

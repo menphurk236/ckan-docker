@@ -4,6 +4,7 @@
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 import ckan.model as model
+from pylons import config
 from ckan.common import _, c
 import ckan.lib.helpers as h
 import json
@@ -126,7 +127,16 @@ def get_site_statistics():
             .filter(model.Group.type != 'group')
     
     resultproxy = model.Session.execute(query).fetchall()
-    stats['group_count'] = len(resultproxy)
+    if config.get('scheming.group_schemas', '') != '':
+        query = model.Session.query(model.Group) \
+            .filter(model.Group.state == 'active') \
+            .filter(model.Group.type != 'organization') \
+            .filter(model.Group.type != 'group')
+    
+        resultproxy = model.Session.execute(query).fetchall()
+        stats['group_count'] = len(resultproxy)
+    else:
+        stats['group_count'] = len(logic.get_action('group_list')({}, {}))
 
     stats['organization_count'] = len(
         logic.get_action('organization_list')({}, {}))
@@ -136,30 +146,30 @@ def convert_string_todate(str_date, format):
     return dt.strptime(str_date, format)
 
 def get_opend_playground_url():
-    return 'https://opend-playground.gdcatalog.go.th'
+    return config.get('thai_gdc.opend_playground_url')
 
 def get_catalog_org_type():
-    return 'organization'
+    return config.get('thai_gdc.catalog_org_type')
 
 def get_is_as_a_service():
-    return 'false'
+    return config.get('thai_gdc.is_as_a_service')
 
 def get_gdcatalog_status_show():
-    return 'true'
+    return config.get('thai_gdc.gdcatalog_status_show')
 
 def get_gdcatalog_portal_url():
-    return 'https://gdcatalog.go.th'
+    return config.get('thai_gdc.gdcatalog_portal_url')
 
 def get_gdcatalog_apiregister_url():
-    return 'https://apiregister.gdcatalog.go.th'
+    return config.get('thai_gdc.gdcatalog_apiregister_url')
 
 def get_gdcatalog_version_update():
-    gdcatalog_harvester_url = 'https://harvester.gdcatalog.go.th'
-    request_proxy = 'true'
+    gdcatalog_harvester_url = config.get('thai_gdc.gdcatalog_harvester_url')
+    request_proxy = config.get('thai_gdc.proxy_request', None)
     if request_proxy:
         proxies = {
-            'http': 'http://proxyout.inet.co.th:8080',
-            'https': 'http://proxyout.inet.co.th:8080'
+            'http': config.get('thai_gdc.proxy_url', None),
+            'https': config.get('thai_gdc.proxy_url', None)
         }
     else:
         proxies = None
@@ -188,13 +198,13 @@ def get_gdcatalog_version_update():
 def get_gdcatalog_state(zone, package_id):
     state = []
     gdcatalog_status_show = get_gdcatalog_status_show()
-    gdcatalog_harvester_url = 'https://harvester.gdcatalog.go.th'
-    site_url = 'https://data.go.th'
-    request_proxy = 'true'
+    gdcatalog_harvester_url = config.get('thai_gdc.gdcatalog_harvester_url')
+    site_url = config.get('ckan.site_url')
+    request_proxy = config.get('thai_gdc.proxy_request', None)
     if request_proxy:
         proxies = {
-            'http': 'http://proxyout.inet.co.th:8080',
-            'https': 'http://proxyout.inet.co.th:8080'
+            'http': config.get('thai_gdc.proxy_url', None),
+            'https': config.get('thai_gdc.proxy_url', None)
         }
     else:
         proxies = None
@@ -250,7 +260,6 @@ def get_organizations(all_fields=False, include_dataset_count=False, sort="name 
         'sort': sort}
     return logic.get_action('organization_list')(context, data_dict)
 
-
 def get_groups(all_fields=False, include_dataset_count=False, sort="name asc"):
     context = {'user': c.user}
     data_dict = {
@@ -258,7 +267,6 @@ def get_groups(all_fields=False, include_dataset_count=False, sort="name asc"):
         'include_dataset_count': include_dataset_count,
         'sort': sort}
     return logic.get_action('group_list')(context, data_dict)
-
 
 def get_resource_download(resource_id):
     return opend_model.get_resource_download(resource_id)
@@ -429,85 +437,3 @@ def get_popular_datasets(limit):
             'total_view': tracking_summary['total']})
 
     return package_list
-
-
-def group_tree(organizations=[], type_='organization'):
-    full_tree_list = toolkit.get_action('group_tree')({}, {'type': type_})
-
-    if not organizations:
-        return full_tree_list
-    else:
-        filtered_tree_list = group_tree_filter(organizations, full_tree_list)
-        return filtered_tree_list
-
-
-def group_tree_filter(organizations, group_tree_list, highlight=False):
-    # this method leaves only the sections of the tree corresponding to the
-    # list since it was developed for the users, all children organizations
-    # from the organizations in the list are included
-    def traverse_select_highlighted(group_tree, selection=[], highlight=False):
-        # add highlighted branches to the filtered tree
-        if group_tree['highlighted']:
-            # add to the selection and remove highlighting if necessary
-            if highlight:
-                selection += [group_tree]
-            else:
-                selection += group_tree_highlight([], [group_tree])
-        else:
-            # check if there is any highlighted child tree
-            for child in group_tree.get('children', []):
-                traverse_select_highlighted(child, selection)
-
-    filtered_tree = []
-    # first highlights all the organizations from the list in the three
-    for group in group_tree_highlight(organizations, group_tree_list):
-        traverse_select_highlighted(group, filtered_tree, highlight)
-
-    return filtered_tree
-
-
-def group_tree_section(id_, type_='organization', include_parents=True,
-                       include_siblings=True):
-    return toolkit.get_action('group_tree_section')(
-        {'include_parents': include_parents,
-         'include_siblings': include_siblings},
-        {'id': id_, 'type': type_, })
-
-
-def _get_action_name(group_id):
-    model_obj = model.Group.get(group_id)
-    return "organization_show" if model_obj.is_organization else "group_show"
-
-
-def group_tree_parents(id_):
-    action_name = _get_action_name(id_)
-    data_dict = {
-        'id': id_,
-        'include_dataset_count': False,
-        'include_users': False,
-        'include_followers': False,
-        'include_tags': False
-    }
-    tree_node = toolkit.get_action(action_name)({}, data_dict)
-    if (tree_node['groups']):
-        parent_id = tree_node['groups'][0]['name']
-        parent_node = \
-            toolkit.get_action(action_name)({}, {'id': parent_id})
-        return group_tree_parents(parent_id) + [parent_node]
-    else:
-        return []
-    
-def group_tree_highlight(organizations, group_tree_list):
-    def traverse_highlight(group_tree, name_list):
-        if group_tree.get('name', "") in name_list:
-            group_tree['highlighted'] = True
-        else:
-            group_tree['highlighted'] = False
-        for child in group_tree.get('children', []):
-            traverse_highlight(child, name_list)
-
-    selected_names = [o.get('name', None) for o in organizations]
-
-    for group in group_tree_list:
-        traverse_highlight(group, selected_names)
-    return group_tree_list

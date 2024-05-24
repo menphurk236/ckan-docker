@@ -11,33 +11,11 @@ Example:
 {% if q is not defined %}{% set q = c.q %}{% endif %}
 
 <div id="publisher-tree">
-     <ul>
-          {% for organization in organizations %}
-          <li>
-               <a href="{{ h.url_for(controller='organization', action='read', id=organization.name) }}">{{
-                    organization.title }}</a>
-               {% if organization.children %}
-               <ul>
-                    {% for child in organization.children %}
-                    <li>
-                         <a href="{{ h.url_for(controller='organization', action='read', id=child.name) }}">{{
-                              child.title }}</a>
-                         {% if child.children %}
-                         <ul>
-                              {% for grandchild in child.children %}
-                              <li>
-                                   <a
-                                        href="{{ h.url_for(controller='organization', action='read', id=grandchild.name) }}">{{
-                                        grandchild.title }}</a>
-                              </li>
-                              {% endfor %}
-                         </ul>
-                         {% endif %}
-                    </li>
-                    {% endfor %}
-               </ul>
-               {% endif %}
-          </li>
-          {% endfor %}
-     </ul>
+     {% if q %}
+     {% set top_nodes = h.group_tree_highlight(organizations, h.group_tree(type_='organization')) %}
+     {% else %}
+     {#% set top_nodes = h.group_tree(organizations=organizations, type_='organization') %#}
+     {% set top_nodes = h.group_tree(type_='organization') %}
+     {% endif %}
+     {% snippet 'organization/snippets/organization_tree.html', top_nodes=top_nodes, use_longnames=True %}
 </div>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import ckan.plugins as p
+from pylons import config
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dict_fns
 import ckan.model as model
@@ -858,6 +859,8 @@ class DatasetImportController(p.toolkit.BaseController):
 
                         value = h.url_for_static('{0}{1}'.format(image_path, value))
 
+                    # Update CKAN's `config` object
+                    config[key] = value
 
                 log.info('Import Dataset: {0}'.format(data))
                 
@@ -904,6 +907,10 @@ class DatasetImportController(p.toolkit.BaseController):
                 toolkit.get_action('dataset_bulk_import')(context, data_dict)
 
                 data_dict['row'] = row_count
+                config["import_log"] = ''
+                config['ckan.import_params'] = data_dict
+                config['ckan.import_uuid'] = import_uuid
+                config['ckan.import_row'] = row_count
 
                 model.set_system_info('ckan.import_params', data_dict)
                 model.set_system_info('ckan.import_uuid', import_uuid)
@@ -919,11 +926,21 @@ class DatasetImportController(p.toolkit.BaseController):
 
         schema = logic.schema.update_configuration_schema()
         data = {}
+        for key in schema:
+            data[key] = config.get(key)
 
         vars = {'data': data, 'errors': {}, 'form_items': items}
         return render('admin/dataset_import_form.html', extra_vars=vars)
     
     def clear_import_log(self):
-        context = {'model': model, 'user': c.user, 'auth_user_obj': c.userobj}
+        
+        config["import_log"] = ''
+        config['template_file'] = ''
+        config['import_org'] = ''
+        config['template_org'] = ''
+        config['ckan.import_params'] = ''
+        config['ckan.import_uuid'] = ''
+        config['ckan.import_row'] = ''
+
         return render('admin/clear_import_log.html')
 
