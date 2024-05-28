@@ -13,17 +13,15 @@ RUN pip install -e git+https://gitlab.nectec.or.th/opend/ckanext-xloader.git#egg
     pip install -e git+https://github.com/conwetlab/ckanext-oauth2.git#egg=ckanext-oauth2 && \
     pip install -e git+https://gitlab.nectec.or.th/opend/ckanext-opendstats.git#egg=ckanext-opendstats
 
-
-RUN pip install -e 'git+https://github.com/menphurk236/ckanext-doat.git#egg=ckanext-doat'
 # Install and configure supervisor
 RUN pip install supervisor && \
     mkdir /etc/supervisord.d
 
 # Copy all setup files
-COPY .setup ${APP_DIR}
-COPY .\setup\supervisor.worker.conf /etc/supervisord.d/worker.conf
-COPY .\setup\supervisor.cron.conf /etc/supervisord.d/cron.conf
-COPY .\setup\supervisord.conf /etc/supervisord.conf
+COPY ./setup ${APP_DIR}
+COPY ./setup/supervisor.worker.conf /etc/supervisord.d/worker.conf
+COPY ./setup/supervisor.cron.conf /etc/supervisord.d/cron.conf
+COPY ./setup/supervisord.conf /etc/supervisord.conf
 # COPY ./setup ${APP_DIR}
 # COPY ./setup/supervisor.worker.conf /etc/supervisord.d/worker.conf
 # COPY ./setup/supervisord.conf /etc/supervisord.con
@@ -32,7 +30,7 @@ COPY .\setup\supervisord.conf /etc/supervisord.conf
 RUN addgroup -S -g 92 ckan && \
     # adduser -S -G ckan -u 92 ckan -h /srv/app
     adduser -u 92 -h /home/ckan -s /bin/bash -D -G ckan ckan
-# adduser -u 92 -h /srv/app -H -D -S -G ckan 
+    # adduser -u 92 -h /srv/app -H -D -S -G ckan 
 
 # Create local storage folder
 RUN mkdir -p $CKAN_STORAGE_PATH && \
@@ -59,4 +57,3 @@ EXPOSE 5000
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD curl --fail http://localhost:5000/api/3/action/status_show || exit 1
 
 ENTRYPOINT ["/srv/app/start_ckan.sh"]
-# CMD [ "ls", "-la" ]

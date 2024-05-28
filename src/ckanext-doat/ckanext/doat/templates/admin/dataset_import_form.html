@@ -54,7 +54,7 @@
   {% endblock %}
   {% set import_id = data['ckan.import_uuid'] %}
   {% set import_row = data['ckan.import_row'] %}
-  {% set import_finished = h.thai_gdc_dataset_bulk_import_status(import_id) | length %}
+  {% set import_finished = h.doat_dataset_bulk_import_status(import_id) | length %}
   {% if import_id == '' or import_finished == 1 %}
   <div class="form-actions">
     <a href="/ckan-admin/clear-import-log" class="btn btn-danger pull-left">ล้างค่า</a>
@@ -88,8 +88,8 @@
     </tr>
     <tr>
       <th>จำนวนชุดข้อมูล</th>
-      {% set import_log_running = h.thai_gdc_dataset_bulk_import_log(import_id) %}
-      <td>สร้างชุดข้อมูลสำเร็จ {{ h.thai_gdc_dataset_bulk_import_count(import_log_running) }} จาก {{ import_row }}</td>
+      {% set import_log_running = h.doat_dataset_bulk_import_log(import_id) %}
+      <td>สร้างชุดข้อมูลสำเร็จ {{ h.doat_dataset_bulk_import_count(import_log_running) }} จาก {{ import_row }}</td>
     </tr>
   </tbody>
 </table>
